@@ -7,16 +7,22 @@ redis_url = 'redis://red-cl0jd2c8s0fs73csl1e0:6379'
 redis_client = redis.Redis.from_url(redis_url, decode_responses=True)
 @app.route('/get_data', methods=['GET'])
 def get_data():
-    # Example GET request to retrieve data from Redis
-    key = request.args.get('key')
-    if key:
-        value = redis_client.get(key)
-        if value:
-            return jsonify({'key': key, 'value': value})
+    try:
+        key = request.args.get('key')
+        if key:
+            # Retrieve the JSON string from Redis
+            value_json = redis_client.get(key)
+
+            if value_json:
+                # Decode the JSON string to a dictionary
+                value_dict = json.loads(value_json)
+                return jsonify({'key': key, 'value': value_dict})
+            else:
+                return jsonify({'error': 'Key not found'}), 404
         else:
-            return jsonify({'error': 'Key not found'}), 404
-    else:
-        return jsonify({'error': 'Missing key parameter'}), 400
+            return jsonify({'error': 'Missing key parameter'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/set_data', methods=['POST'])
 def set_data():
