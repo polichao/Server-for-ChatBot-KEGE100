@@ -16,7 +16,7 @@ def get_data():
             if value_json:
                 # Decode the JSON string to a dictionary
                 value_dict = json.loads(value_json)
-                return jsonify({'key': key, 'value': value_dict})
+                return jsonify(value_dict)
             else:
                 return jsonify({'error': 'Key not found'}), 404
         else:
