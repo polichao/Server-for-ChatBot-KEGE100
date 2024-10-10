@@ -43,7 +43,7 @@ def set_data():
             # Store the JSON string in Redis
             redis_client.set(key, json_value)
 
-            return jsonify({'success': True})
+            return jsonify({'success': True}), 200
         else:
             return jsonify({'error': 'Missing key or value parameters'}), 400
     except Exception as e:
