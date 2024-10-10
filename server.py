@@ -1,8 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import redis
 import json
 
 app = Flask(__name__)
+
+# Настройка CORS: разрешаем запросы со всех доменов
+CORS(app)
+
 redis_url = 'redis://red-cl0jd2c8s0fs73csl1e0:6379'
 redis_client = redis.Redis.from_url(redis_url, decode_responses=True)
 @app.route('/get_data', methods=['GET'])
